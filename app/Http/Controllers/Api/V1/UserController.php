@@ -30,7 +30,7 @@ class UserController extends Controller
   public function index()
   {
     try {
-      # fetch user products only
+      # fetch users
       $data = $this->userRepository->all();
       return self::apiResponseSuccess($data, 'Fetched all users!');
 
