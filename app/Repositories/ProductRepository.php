@@ -34,7 +34,7 @@ class ProductRepository implements ApiCrudInterface{
     }
 
     
-    public function search($keyword, $perPage, $user == null)
+    public function search($keyword, $perPage, $user=null)
     {
         $perPage = isset($perPage) ? $perPage : 9;
         return Product::when($user != null, function ($q) use ($user) {

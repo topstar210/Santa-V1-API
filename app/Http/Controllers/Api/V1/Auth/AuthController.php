@@ -49,6 +49,24 @@ class AuthController extends Controller
     }
 
     
+    public function loginByCode(Request $request)
+    {
+        try {
+            if ($token = $this->guard()->attempt(
+                    $request->only('code'))
+                ) {
+                $data =  $this->respondWithToken($token);
+            }else{
+                return self::apiResponseError(null, 'Invalid the login code !', Response::HTTP_UNAUTHORIZED);
+            }
+
+            return self::apiResponseSuccess($data, 'Logged In Successfully !');
+        } catch (\Exception $e) {
+            return self::apiServerError($e->getMessage());
+        }
+    }
+
+    
     public function register(RegisterRequest $request)
     {
         try {
