@@ -31,15 +31,20 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         try {
-            if ($token = $this->guard()->attempt(
-                    $request->only('email', 'password'))
-                ) {
-                $data =  $this->respondWithToken($token);
-            }else{
+            $credentials = $request->only('email', 'password');
+    
+            if ($token = $this->guard()->attempt($credentials)) {
+                $user = $this->guard()->user();
+    
+                if ($user->status === 'active') {
+                    $data = $this->respondWithToken($token);
+                    return self::apiResponseSuccess($data, 'Logged In Successfully !');
+                } else {
+                    return self::apiResponseError(null, 'Your account is inactive. Please contact support.', Response::HTTP_FORBIDDEN);
+                }
+            } else {
                 return self::apiResponseError(null, 'Invalid Email and Password !', Response::HTTP_UNAUTHORIZED);
             }
-
-            return self::apiResponseSuccess($data, 'Logged In Successfully !');
         } catch (\Exception $e) {
             return self::apiServerError($e->getMessage());
         }
