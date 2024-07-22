@@ -46,6 +46,11 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'code' => [
+            'driver' => 'jwt',
+            'provider' => 'codes',
+        ],
     ],
 
     /*
@@ -68,6 +73,11 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+
+        'codes' => [
+            'driver' => 'code',
             'model' => App\Models\User::class,
         ],
 

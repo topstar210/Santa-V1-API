@@ -32,8 +32,6 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         try {
-            
-
             if ($token = $this->guard()->attempt(
                     $request->only('email', 'password'))
                 ) {
@@ -52,15 +50,15 @@ class AuthController extends Controller
     public function loginByCode(Request $request)
     {
         try {
-            if ($token = $this->guard()->attempt(
-                    $request->only('code'))
-                ) {
-                $data =  $this->respondWithToken($token);
-            }else{
+            $credentials = $request->only('code');
+            $token = Auth::guard('code')->attempt($credentials);
+    
+            if ($token) {
+                $data = $this->respondWithToken($token);
+                return self::apiResponseSuccess($data, 'Logged In Successfully !');
+            } else {
                 return self::apiResponseError(null, 'Invalid the login code !', Response::HTTP_UNAUTHORIZED);
             }
-
-            return self::apiResponseSuccess($data, 'Logged In Successfully !');
         } catch (\Exception $e) {
             return self::apiServerError($e->getMessage());
         }
