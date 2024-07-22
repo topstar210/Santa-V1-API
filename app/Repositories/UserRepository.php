@@ -31,7 +31,7 @@ class UserRepository
     $user = User::find($id);
 
     if ($user) {
-      $user->delete($user);
+      $user->delete();
 
       return true;
     }

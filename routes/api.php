@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\UserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\V1\ModuleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,8 +29,13 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('profile', [AuthController::class, 'profile']);
 
         # User Routes
-        Route::post('user/add', [UserController::class, 'create']);
         Route::resource('users', UserController::class);
+        Route::post('user/add', [UserController::class, 'create']);
+
+
+        # Module Routes
+        Route::resource('modules', ModuleController::class);
+        Route::resource('module/create', [ModuleController::class, 'store']);
 
         # Product Routes
         Route::resource('products', ProductController::class);
