@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
 use App\Repositories\AuthRepository;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponseTrait;
