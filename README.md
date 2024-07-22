@@ -1,10 +1,9 @@
-# Laravel CRUD API with JWT Auth
-Laravel product CEUD API with JWT auth using repository pattern. You can connect this API with Vue.js app [(Vue SPA CRUD)](https://github.com/RakibDevs/vue-spa-crud/)
+# Laravel Santa-v1-API
 
 ## Initial Setup
 ```
-git clone https://github.com/rakibdevs/laravel-product-crud-api.git
-cd laravel-product-api
+git clone https://github.com/topstar210/Santa-V1-API.git
+cd Santa-V1-API
 cp .env.example .env
 composer update
 php artisan migrate:refresh --seed
@@ -15,12 +14,8 @@ php artisan serve
 email: test@example.com
 password: 123456
 
-## API Documentation
-Postman API Documentation: https://documenter.getpostman.com/view/11223504/Tz5jffsv
 
 1. Login with given credentials or you can register
 2. Set bearer token as Authorization header
 3. Hit API
 
-Test on postman,
-<img src="https://github.com/RakibDevs/laravel-product-crud-api/blob/master/public/postman%20api.jpg">
