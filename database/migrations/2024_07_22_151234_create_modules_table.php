@@ -16,9 +16,9 @@ class CreateModulesTable extends Migration
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description')->default(null);
+            $table->text('description')->nullable();
             $table->string('status')->default('pending');
-            $table->tinyText('background_url')->default(null);
+            $table->tinyText('background_url')->nullable();
             $table->timestamps();
         });
     }

@@ -35,7 +35,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         # Module Routes
         Route::resource('modules', ModuleController::class);
-        Route::resource('module/create', [ModuleController::class, 'store']);
+        Route::post('module/create', [ModuleController::class, 'store']);
 
         # Product Routes
         Route::resource('products', ProductController::class);

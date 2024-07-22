@@ -14,7 +14,7 @@ class AddStatusToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('login_code')->default(null);
+            $table->string('login_code')->nullable();
             $table->enum('status', ['active', 'pending']);
         });
     }
