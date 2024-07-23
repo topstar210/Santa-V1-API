@@ -35,7 +35,7 @@ class UserRepository
       'login_code' => $data['login_code'],
       'expired_date' => $data['expired_date'],
       'status' => 'active',
-      'is_temp' => 1
+      'is_temp' => '1'
     ];
     $user = User::create($data);
 

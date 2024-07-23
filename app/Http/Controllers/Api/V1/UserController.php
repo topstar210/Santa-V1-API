@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\TempUserRequest;
 use App\Repositories\UserRepository;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Response;
@@ -59,7 +60,7 @@ class UserController extends Controller
     }
   }
 
-  public function createTempUser(Request $request)
+  public function createTempUser(TempUserRequest $request)
   {
     try {
       $requestData = $request->only(
@@ -71,7 +72,6 @@ class UserController extends Controller
       if (count($checkUser->toArray()) > 0) {
         return self::apiResponseError(null, "Login code already exists.", $this->not_found);
       }
-
 
       $user = $this->userRepository->createTempUser($requestData);
       return self::apiResponseSuccess($user, 'Successfully added', Response::HTTP_OK);
