@@ -30,11 +30,13 @@ Route::group(['prefix' => 'v1'], function () {
 
         # User Routes
         Route::resource('users', UserController::class);
+        Route::get('user/analytic', [UserController::class, 'analytic']);
         Route::post('user/add', [UserController::class, 'create']);
 
 
         # Module Routes
         Route::resource('modules', ModuleController::class);
+        Route::get('module/analytic', [ModuleController::class, 'analytic']);
         Route::post('module/create', [ModuleController::class, 'store']);
 
         # Product Routes

@@ -38,4 +38,16 @@ class UserRepository
     return false;
   }
 
+  public function analytic()
+  {
+    $total = User::count('id');
+    $temp = User::where('is_temp', 1)->count();
+
+    return [
+      'total' => $total,
+      'registered' => $total - $temp,
+      'temp' => $temp
+    ];
+  }
+
 }

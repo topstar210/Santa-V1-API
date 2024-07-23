@@ -63,5 +63,14 @@ class ModuleController extends Controller
     return self::apiResponseSuccess($data, 'Found ' . count($data) . ' Modules');
   }
 
+  public function analytic(Request $request)
+  {
+    try {
+      $result = $this->moduleRepository->analytic();
+      return self::apiResponseSuccess($result, 'Successfully Analyze', Response::HTTP_OK);
+    } catch (\Exception $e) {
+      return self::apiServerError($e->getMessage());
+    }
+  }
 
 }

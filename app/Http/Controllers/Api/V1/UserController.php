@@ -7,6 +7,7 @@ use App\Http\Requests\UserRequest;
 use App\Repositories\UserRepository;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -51,6 +52,16 @@ class UserController extends Controller
       );
       $user = $this->userRepository->create($requestData);
       return self::apiResponseSuccess($user, 'Successfully added', Response::HTTP_OK);
+    } catch (\Exception $e) {
+      return self::apiServerError($e->getMessage());
+    }
+  }
+
+  public function analytic(Request $request)
+  {
+    try {
+      $result = $this->userRepository->analytic();
+      return self::apiResponseSuccess($result, 'Successfully Analyze', Response::HTTP_OK);
     } catch (\Exception $e) {
       return self::apiServerError($e->getMessage());
     }
