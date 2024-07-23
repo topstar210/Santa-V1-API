@@ -9,7 +9,7 @@ class ModuleRepository
 
     public function all()
     {
-        return Module::orderBy('id', 'desc')
+        return Module::orderBy('id', 'asc')
             ->with('user')
             ->get();
     }
