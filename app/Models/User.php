@@ -24,6 +24,7 @@ class User extends Authenticatable implements JWTSubject
         'status',
         'is_temp',
         'expired_date',
+        'is_admin',
     ];
 
     /**
