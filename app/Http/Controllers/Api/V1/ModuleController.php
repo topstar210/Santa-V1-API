@@ -63,7 +63,7 @@ class ModuleController extends Controller
     return self::apiResponseSuccess($data, 'Found ' . count($data) . ' Modules');
   }
 
-  public function analytic(Request $request)
+  public function analytic()
   {
     try {
       $result = $this->moduleRepository->analytic();

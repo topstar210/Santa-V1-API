@@ -57,7 +57,7 @@ class UserController extends Controller
     }
   }
 
-  public function analytic(Request $request)
+  public function analytic()
   {
     try {
       $result = $this->userRepository->analytic();
