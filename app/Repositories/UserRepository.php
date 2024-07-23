@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use App\Models\Module;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository
@@ -43,11 +44,13 @@ class UserRepository
   {
     $total = User::count('id');
     $temp = User::where('is_temp', 1)->count();
+    $modules = Module::with('user')->count('id');
 
     return [
       'total' => $total,
       'registered' => $total - $temp,
-      'temp' => $temp
+      'temp' => $temp,
+      'modules' => $modules
     ];
   }
 
