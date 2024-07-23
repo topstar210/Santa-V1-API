@@ -32,6 +32,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::resource('users', UserController::class);
         Route::get('user/analytic', [UserController::class, 'analytic']);
         Route::post('user/add', [UserController::class, 'create']);
+        Route::post('user/add-tempuser', [UserController::class, 'createTempUser']);
 
 
         # Module Routes

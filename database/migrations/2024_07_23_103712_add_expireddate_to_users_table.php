@@ -14,6 +14,7 @@ class AddExpireddateToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->string('login_code')->nullable()->unique();
             $table->dateTime('expired_date')->nullable()->comment('only for temp users');
         });
     }
@@ -27,6 +28,7 @@ class AddExpireddateToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('expired_date');
+            $table->dropColumn('login_code');
         });
     }
 }

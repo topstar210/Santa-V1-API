@@ -28,6 +28,26 @@ class UserRepository
     return $user;
   }
 
+  public function createTempUser(array $data)
+  {
+    $data = [
+      'name' => $data['name'],
+      'login_code' => $data['login_code'],
+      'expired_date' => $data['expired_date'],
+      'status' => 'active',
+      'is_temp' => 1
+    ];
+    $user = User::create($data);
+
+    return $user;
+  }
+
+  public function findTempUser($code)
+  {
+    $temp = User::where('login_code', $code)->get();
+    return $temp;
+  }
+
   public function delete($id)
   {
     $user = User::find($id);

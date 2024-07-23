@@ -14,7 +14,6 @@ class AddStatusToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('login_code')->nullable();
             $table->enum('status', ['active', 'pending']);
         });
     }
@@ -28,7 +27,6 @@ class AddStatusToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('status');
-            $table->dropColumn('login_code');
         });
     }
 }

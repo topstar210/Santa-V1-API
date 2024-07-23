@@ -59,6 +59,27 @@ class UserController extends Controller
     }
   }
 
+  public function createTempUser(Request $request)
+  {
+    try {
+      $requestData = $request->only(
+        'name',
+        'login_code',
+        'expired_date',
+      );
+      $checkUser = $this->userRepository->findTempUser($requestData['login_code']);
+      if (count($checkUser->toArray()) > 0) {
+        return self::apiResponseError(null, "Login code already exists.", $this->not_found);
+      }
+
+
+      $user = $this->userRepository->createTempUser($requestData);
+      return self::apiResponseSuccess($user, 'Successfully added', Response::HTTP_OK);
+    } catch (\Exception $e) {
+      return self::apiServerError($e->getMessage());
+    }
+  }
+
   public function analytic()
   {
     try {
