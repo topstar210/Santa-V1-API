@@ -28,11 +28,13 @@ class UserController extends Controller
    *
    * @return \Illuminate\Http\Response user list 
    */
-  public function index()
+  public function index(Request $request)
   {
     try {
+      $is_temp = $request->input('is_temp');
+
       # fetch users
-      $data = $this->userRepository->all();
+      $data = $this->userRepository->all(isset($is_temp), $is_temp);
       return self::apiResponseSuccess($data, 'Fetched all users!');
 
     } catch (\Exception $e) {

@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\Hash;
 class UserRepository
 {
 
-  public function all()
+  public function all($flag = null, $is_temp)
   {
-    return User::orderBy('id', 'desc')->get();
+    $user = $flag ? User::where("is_temp", $is_temp)->orderBy('id', 'desc')->get() : User::orderBy('id', 'desc')->get();
+    return $user;
   }
 
   public function create(array $data)
