@@ -10,6 +10,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Repositories\AuthRepository;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponseTrait;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
@@ -27,15 +28,19 @@ class AuthController extends Controller
         $this->authRepository = $authRepository;
     }
 
-    
     public function login(LoginRequest $request)
     {
         try {
             $credentials = $request->only('email', 'password');
-    
+
             if ($token = $this->guard()->attempt($credentials)) {
                 $user = $this->guard()->user();
-    
+                $isEmailVerify = $user->email_verified_at;
+                if (!isset($isEmailVerify)) {
+                    event(new Registered($user));
+                    return self::apiResponseError(null, 'The verification link sent. ', Response::HTTP_ACCEPTED);
+                }
+
                 if ($user->status === 'active') {
                     $data = $this->respondWithToken($token);
                     return self::apiResponseSuccess($data, 'Logged In Successfully !');
@@ -50,13 +55,13 @@ class AuthController extends Controller
         }
     }
 
-    
+
     public function loginByCode(Request $request)
     {
         try {
             $credentials = $request->only('code');
             $token = Auth::guard('code')->attempt($credentials);
-    
+
             if ($token) {
                 $data = $this->respondWithToken($token);
                 return self::apiResponseSuccess($data, 'Logged In Successfully !');
@@ -68,20 +73,20 @@ class AuthController extends Controller
         }
     }
 
-    
+
     public function register(RegisterRequest $request)
     {
         try {
             $requestData = $request->only(
-                'name', 
-                'email', 
-                'password', 
+                'name',
+                'email',
+                'password',
                 'password_confirmation'
             );
             $user = $this->authRepository->register($requestData);
-            if($user){
-                if($token = $this->guard()->attempt($requestData)) {
-                    $data =  $this->respondWithToken($token);
+            if ($user) {
+                if ($token = $this->guard()->attempt($requestData)) {
+                    $data = $this->respondWithToken($token);
                     return self::apiResponseSuccess($data, 'Successfully registered', Response::HTTP_OK);
                 }
             }
@@ -94,13 +99,13 @@ class AuthController extends Controller
     {
         try {
             $data = $this->guard()->user();
-            return self::apiResponseSuccess($data,'Profile Fetched Successfully !');
+            return self::apiResponseSuccess($data, 'Profile Fetched Successfully !');
         } catch (\Exception $e) {
             return self::apiServerError($e->getMessage());
         }
     }
 
-   
+
     public function logout()
     {
         try {
@@ -113,15 +118,15 @@ class AuthController extends Controller
         }
     }
 
-   
+
     public function refresh()
     {
         try {
 
-            $refreshed  = $this->guard()->refresh();
-            $data       = $this->respondWithToken($refreshed);
+            $refreshed = $this->guard()->refresh();
+            $data = $this->respondWithToken($refreshed);
 
-            return self::apiResponseSuccess($data,'Token Refreshed!');
+            return self::apiResponseSuccess($data, 'Token Refreshed!');
 
         } catch (\Exception $e) {
             return self::apiServerError($e->getMessage());
@@ -148,12 +153,14 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
-        $data = [[
-            'access_token'  => $token,
-            'token_type'    => 'bearer',
-            'expires_in'    => $this->guard()->factory()->getTTL() * 60 * 24 * 30,
-            'user'          => $this->guard()->user()
-        ]];
+        $data = [
+            [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => $this->guard()->factory()->getTTL() * 60 * 24 * 30,
+                'user' => $this->guard()->user()
+            ]
+        ];
 
         return $data[0];
     }
