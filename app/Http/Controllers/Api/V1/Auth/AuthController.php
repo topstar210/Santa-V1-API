@@ -11,6 +11,7 @@ use App\Repositories\AuthRepository;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 class AuthController extends Controller
 {
@@ -38,7 +39,7 @@ class AuthController extends Controller
                 $isEmailVerify = $user->email_verified_at;
                 if (!isset($isEmailVerify)) {
                     event(new Registered($user));
-                    return self::apiResponseError(null, 'The verification link sent. ', Response::HTTP_ACCEPTED);
+                    // return self::apiResponseError(null, 'The verification link sent. ', Response::HTTP_ACCEPTED);
                 }
 
                 if ($user->status === 'active') {
@@ -53,6 +54,12 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return self::apiServerError($e->getMessage());
         }
+    }
+
+    public function emailVerify(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+        return self::apiResponseSuccess(null, 'Email Validation Was Successfully !');
     }
 
 

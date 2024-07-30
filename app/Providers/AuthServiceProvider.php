@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\URL;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,28 @@ class AuthServiceProvider extends ServiceProvider
     ];
 
     /**
+     * Get the verification URL for the given notifiable.
+     *
+     * @param  mixed  $notifiable
+     * @return string
+     */
+    protected function verificationUrl($notifiable)
+    {
+        // Define your frontend domain
+        $frontendDomain = env('FRONTEND_URL');
+
+        // Generate the temporary signed URL
+        $url = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $notifiable->getKey(), 'hash' => sha1($notifiable->getEmailForVerification())]
+        );
+
+        print_r(str_replace(url('/'), $frontendDomain, $url)); 
+        return str_replace(url('/'), $frontendDomain, $url);
+    }
+
+    /**
      * Register any authentication / authorization services.
      *
      * @return void
@@ -28,17 +51,17 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        
-        Auth::provider('code', function($app, array $config) {
+
+        Auth::provider('code', function ($app, array $config) {
             return new CodeUserProvider($app['hash'], $config['model']);
         });
 
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
             return (new MailMessage)
-                        ->subject('Verify Email Address')
-                        ->line('Click the button below to verify your email address.')
-                        ->action('Verify Email Address', $url)
-                        ->line('If you did not create an account, no further action is required.');
+                ->subject('Verify Email Address')
+                ->line('Click the button below to verify your email address.')
+                ->action('Verify Email Address', $this->verificationUrl($notifiable))
+                ->line('If you did not create an account, no further action is required.');
         });
     }
 }
