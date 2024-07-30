@@ -39,7 +39,6 @@ class AuthServiceProvider extends ServiceProvider
             ['id' => $notifiable->getKey(), 'hash' => sha1($notifiable->getEmailForVerification())]
         );
 
-        print_r(str_replace(url('/'), $frontendDomain, $url)); 
         return str_replace(url('/'), $frontendDomain, $url);
     }
 
