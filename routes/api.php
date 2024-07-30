@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\ModuleController;
+use App\Http\Controllers\MailTestController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,5 +46,5 @@ Route::group(['prefix' => 'v1'], function () {
         Route::resource('products', ProductController::class);
     });
 
+    Route::get('/send-test-email', [MailTestController::class, 'sendTestEmail']);
 });
-
