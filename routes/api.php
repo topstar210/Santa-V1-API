@@ -37,7 +37,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('user/analytic', [UserController::class, 'analytic']);
         Route::post('user/add', [UserController::class, 'create']);
         Route::post('user/add-tempuser', [UserController::class, 'createTempUser']);
-
+        Route::post('user/delete-user/{id}', [UserController::class, 'delete']);
+        Route::post('user/delete-temp-user/{id}', [UserController::class, 'delete']);
 
         # Module Routes
         Route::resource('modules', ModuleController::class);

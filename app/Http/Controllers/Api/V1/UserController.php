@@ -90,4 +90,20 @@ class UserController extends Controller
     }
   }
 
+  public function delete($id)
+  {
+    try {
+      $data = $this->userRepository->delete($id);
+      if ($data) {
+        $msg = 'User Deleted Successfully !';
+        return self::apiResponseSuccess($data, $msg);
+      }
+      $msg = 'User Not Found';
+      return self::apiResponseError(null, $msg, $this->not_found);
+
+    } catch (\Exception $e) {
+      return self::apiServerError($e->getMessage());
+    }
+  }
+
 }

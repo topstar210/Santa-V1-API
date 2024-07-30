@@ -51,8 +51,7 @@ class UserRepository
   public function delete($id)
   {
     $user = User::find($id);
-
-    if ($user) {
+    if ($user && $user->is_admin == 0) {
       $user->delete();
 
       return true;
