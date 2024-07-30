@@ -60,7 +60,7 @@ class AuthServiceProvider extends ServiceProvider
             return (new MailMessage)
                 ->subject('Verify Email Address')
                 ->line('Click the button below to verify your email address.')
-                ->action('Verify Email Address', "asdfasdasdgasdgasdg")
+                ->action('Verify Email Address', $this->verificationUrl($notifiable))
                 ->line('If you did not create an account, no further action is required.');
         });
     }
