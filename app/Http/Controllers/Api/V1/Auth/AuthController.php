@@ -10,7 +10,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Repositories\AuthRepository;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponseTrait;
-use Illuminate\Auth\Events\Registered;
+// use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 class AuthController extends Controller
@@ -36,11 +36,11 @@ class AuthController extends Controller
 
             if ($token = $this->guard()->attempt($credentials)) {
                 $user = $this->guard()->user();
-                $isEmailVerify = $user->email_verified_at;
-                if (!isset($isEmailVerify)) {
-                    event(new Registered($user));
-                    // return self::apiResponseError(null, 'The verification link sent. ', Response::HTTP_ACCEPTED);
-                }
+                // $isEmailVerify = $user->email_verified_at;
+                // if (!isset($isEmailVerify)) {
+                //     event(new Registered($user));
+                //     // return self::apiResponseError(null, 'The verification link sent. ', Response::HTTP_ACCEPTED);
+                // }
 
                 if ($user->status === 'active') {
                     $data = $this->respondWithToken($token);

@@ -23,11 +23,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('login-by-code', [AuthController::class, 'loginByCode']);
     Route::post('register', [AuthController::class, 'register']);
+    Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'emailVerify'])->name('verification.verify');
 
     Route::group(['middleware' => 'auth:api'], function () {
         # Auth Routes
-        Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'emailVerify'])->name('verification.verify');
-        
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('refresh', [AuthController::class, 'refresh']);
         Route::get('profile', [AuthController::class, 'profile']);

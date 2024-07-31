@@ -9,6 +9,7 @@ use App\Repositories\UserRepository;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
 
 class UserController extends Controller
 {
@@ -54,6 +55,8 @@ class UserController extends Controller
         'password_confirmation'
       );
       $user = $this->userRepository->create($requestData);
+      
+      event(new Registered($user));
       return self::apiResponseSuccess($user, 'Successfully added', Response::HTTP_OK);
     } catch (\Exception $e) {
       return self::apiServerError($e->getMessage());
