@@ -10,8 +10,10 @@ use App\Http\Requests\RegisterRequest;
 use App\Repositories\AuthRepository;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponseTrait;
+use Illuminate\Auth\Events\Verified;
 // use Illuminate\Auth\Events\Registered;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+// use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -56,9 +58,26 @@ class AuthController extends Controller
         }
     }
 
-    public function emailVerify(EmailVerificationRequest $request)
+    public function emailVerify(Request $request, $id, $hash)
     {
-        $request->fulfill();
+        // Retrieve the user by their ID
+        $user = User::findOrFail($id);
+
+        // Check if the hash matches the user's email hash
+        if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            return self::apiResponseSuccess(null, 'Invalid verification link.');
+        }
+
+        // Mark the user as verified if not already verified
+        if ($user->hasVerifiedEmail()) {
+            return self::apiResponseSuccess(null, 'Email already verified.');
+        }
+
+        $user->markEmailAsVerified();
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
+        }
+
         return self::apiResponseSuccess(null, 'Email Validation Was Successfully !');
     }
 
